@@ -9,7 +9,7 @@ type Request struct {
 	ProtocolVersion string
 	StatusCode      int16
 	StatusText      string
-	Headers         map[string]string // Request Headers, General Headers, Entity Headers
+	Headers         map[string][]string // Request Headers, General Headers, Entity Headers
 	Body            string
 }
 

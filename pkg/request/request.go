@@ -7,13 +7,14 @@ import (
 
 // Request is HTTP Request struct
 // Follow structure definition at:
+// RFC 7230: https://tools.ietf.org/html/rfc7230
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
 type Request struct {
 	Method          string
 	URL             string
 	IsSecure        bool
 	ProtocolVersion string
-	Headers         map[string]string // Request Headers, General Headers, Entity Headers
+	Headers         map[string][]string // Request Headers, General Headers, Entity Headers
 	QueryParams     map[string]string
 	Body            string
 }

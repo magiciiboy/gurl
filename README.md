@@ -1,5 +1,6 @@
 # gURL - A simplest version of cURL written in Go
-A command-line tool that handles the HTTP requests
+A command-line tool that handles the HTTP requests  
+This package uses HTTP/1.1 accordingly to RFC 7230.
 
 ## Usage
 ```bash
