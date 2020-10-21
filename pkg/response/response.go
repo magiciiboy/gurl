@@ -1,24 +1,19 @@
-package request
+package response
 
-import (
-	// "errors"
-	"github.com/magiciiboy/gurl/pkg/common"
-)
+import "github.com/magiciiboy/gurl/pkg/common"
 
-// Request is HTTP Request struct
+// Request is HTTP Response struct
 // Follow structure definition at:
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
 type Request struct {
-	Method          string
-	URL             string
-	IsSecure        bool
 	ProtocolVersion string
+	StatusCode      int16
+	StatusText      string
 	Headers         map[string]string // Request Headers, General Headers, Entity Headers
-	QueryParams     map[string]string
 	Body            string
 }
 
-// GetContentType extracts header "Content-Type" of a request
+// GetContentType extracts header "Content-Type" of a response
 func (req Request) GetContentType() string {
 	return common.GetContentType(req.Headers)
 }
