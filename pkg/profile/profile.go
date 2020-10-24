@@ -33,7 +33,7 @@ type SessionProfile struct {
 	MaxResponseSize int64 //byte
 
 	TotalStatusError int
-	StatusErrorCodes []int16
+	StatusErrorCodes map[int16]int
 
 	TotalError           int
 	Errors               []error
@@ -58,7 +58,7 @@ func (p *SessionProfile) DoStat() {
 
 // PrintSummary Print out the profiling result
 func (p *SessionProfile) PrintSummary() {
-	fmt.Printf("\nSummary:\r\n"+
+	fmt.Printf("Summary:\r\n"+
 		"\t- Requests:\t %v \r\n"+
 		"\t- Fastest:\t %v ms \r\n"+
 		"\t- Slowest:\t %v ms \r\n"+
@@ -76,13 +76,23 @@ func (p *SessionProfile) PrintSummary() {
 		p.SuccessfulPercentage,
 		p.MinResponseSize,
 		p.MaxResponseSize,
-		p.StatusErrorCodes,
+		p.getErrorCodesString(),
 	)
+}
+
+func (p *SessionProfile) getErrorCodesString() (out string) {
+	out = "\r\n"
+	for k, count := range p.StatusErrorCodes {
+		out += fmt.Sprintf("\t\t* %v: %v time(s)", k, count)
+	}
+	return
 }
 
 // DefaultProfiler is the default profiler
 var DefaultProfiler = &Profiler{
-	Profile: SessionProfile{},
+	Profile: SessionProfile{
+		StatusErrorCodes: make(map[int16]int),
+	},
 }
 
 // DoRequest sends a request and captures profiling information
@@ -96,7 +106,12 @@ func (p *Profiler) DoRequest(client *http.Client, req *http.Request) {
 	}
 
 	if statusCodeRange := res.StatusCode / 100; statusCodeRange == 4 || statusCodeRange == 5 {
-		p.Profile.StatusErrorCodes = append(p.Profile.StatusErrorCodes, res.StatusCode)
+		_, ok := p.Profile.StatusErrorCodes[res.StatusCode]
+		if ok {
+			p.Profile.StatusErrorCodes[res.StatusCode]++
+		} else {
+			p.Profile.StatusErrorCodes[res.StatusCode] = 1
+		}
 	}
 
 	size := int64(unsafe.Sizeof(res.Raw))

@@ -42,17 +42,12 @@ func (c *Client) GetOrResetConnection(service string) (net.Conn, error) {
 
 // SendRequest sends a HTTP request
 func (c *Client) SendRequest(req *Request) (*Response, error) {
-	msg := "GET " + req.URL.Path + " HTTP/1.1\r\n" +
-		"Host: " + req.URL.Host + "\r\n" +
-		"User-Agent: gurl/0.0.1\r\n" +
-		"Accept: */*\r\n\r\n"
-
 	addr := c.GetServiceAddress(req.URL.Host)
 	conn, err := c.GetOrResetConnection(addr)
 	if err != nil {
 		return nil, err
 	}
-	_, err = conn.Write([]byte(msg))
+	_, err = conn.Write([]byte(req.Raw))
 	checkError(err)
 
 	r := bufio.NewReader(conn)

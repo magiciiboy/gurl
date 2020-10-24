@@ -16,6 +16,7 @@ type Request struct {
 	Headers      Header
 	QueryParams  map[string]string
 	Body         string
+	Raw          string
 }
 
 // DefaultUserAgent of this library
@@ -24,12 +25,20 @@ const defaultUserAgent = "gurl-http-client/1.1"
 // CreateGETRequest creates a new GET Request
 func CreateGETRequest(url string) (*Request, error) {
 	URL, err := urllib.ParseURL(url)
-	return &Request{
-		Method:       "GET",
-		URL:          URL,
-		Headers:      Header{"User-Agent": []string{defaultUserAgent}},
-		ProtoVersion: &HTTPVersion1_1,
-	}, err
+	if err == nil {
+		msg := "GET " + URL.Path + " HTTP/1.1\r\n" +
+			"Host: " + URL.Host + "\r\n" +
+			"User-Agent: gurl/0.0.1\r\n" +
+			"Accept: */*\r\n\r\n"
+		return &Request{
+			Method:       "GET",
+			URL:          URL,
+			Headers:      Header{"User-Agent": []string{defaultUserAgent}},
+			ProtoVersion: &HTTPVersion1_1,
+			Raw:          msg,
+		}, nil
+	}
+	return nil, err
 }
 
 // GetUserAgent returns Content-Type header

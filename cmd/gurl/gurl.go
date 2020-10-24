@@ -24,6 +24,7 @@ func main() {
 	} else {
 		fmt.Println("gurl", *url, *prof, *verbose)
 		req, err := http.CreateGETRequest(*url)
+		fmt.Printf("\nRequest:\n%v\n", req.Raw)
 		if err != nil {
 			fmt.Printf("URL Parsing Error: %s\n", err.Error())
 			os.Exit(1)
@@ -34,7 +35,7 @@ func main() {
 			if err != nil {
 				fmt.Printf("Error: %v\n", err)
 			} else {
-				fmt.Printf("Response: %v\n", res.Raw)
+				fmt.Printf("Response:\n%v\n", res.Raw)
 			}
 		} else {
 			p := sendNRequestWithProfiling(http.DefaultClient, req, *prof)
