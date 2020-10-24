@@ -1,4 +1,4 @@
-package common
+package http
 
 import (
 	"strings"
@@ -161,6 +161,30 @@ var headerTestSet = []HeaderTestCase{
 		},
 		desc: "Simple Delete/Get",
 	},
+	{
+		initial: Header{"Content-Type": []string{"application/json"}},
+		actions: []HeaderAction{
+			{
+				action:   "AddLineString",
+				key:      "Content-Length:123",
+				values:   []string{""},
+				expected: nil,
+			},
+			{
+				action:   "AddLineString",
+				key:      "Content-Length:123",
+				values:   []string{""},
+				expected: nil,
+			},
+			{
+				action:   "GetAll",
+				key:      "Content-Length",
+				values:   nil,
+				expected: "123;123",
+			},
+		},
+		desc: "Simple AddLineString/GetAll",
+	},
 }
 
 func TestCanonicalKey(t *testing.T) {
@@ -195,6 +219,8 @@ func TestHeaderModification(t *testing.T) {
 				h.SetOne(a.key, a.values[0])
 			case "Add":
 				h.Add(a.key, a.values[0])
+			case "AddLineString":
+				h.AddLineString(a.key)
 			case "Delete":
 				h.Delete(a.key)
 			}

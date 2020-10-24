@@ -2,6 +2,13 @@
 A command-line tool that handles the HTTP requests  
 This package uses HTTP/1.1 accordingly to RFC 7230.
 
+## Limitations
+Of course, this has a lot of limitations since it has a very simple implementation.
+- Only support HTTP/1.1
+- Only method GET
+- No Authentication
+- No Cookie/Session
+
 ## Usage
 ```bash
 usage: gurl [-h|--help] -u|--url "<value>" [-p|--profile <integer>]

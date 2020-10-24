@@ -1,13 +1,31 @@
-package common
+package http
+
+import (
+	"fmt"
+	"strings"
+)
 
 // Header type contains all HTTP headers
 // Including Request Headers, General Headers, Entity Headers
 type Header map[string][]string
 
-// Add appends a new value to a key
+// Add appends a new value to a header
 func (h Header) Add(k, v string) {
 	ck := CanonicalKey(k)
 	h[ck] = append(h[ck], v)
+}
+
+// AddLineString appends a new value to a header with
+// the value is extracted from a raw string
+// For example, "Content-Length: 123"
+func (h Header) AddLineString(line string) (key string, err error) {
+	elems := strings.Split(line, ":")
+	if len(elems) != 2 {
+		return "", fmt.Errorf("Invalid header line: `%s`", line)
+	}
+	key, value := strings.TrimSpace(elems[0]), strings.TrimSpace(elems[1])
+	h.Add(key, value)
+	return key, nil
 }
 
 // Set changes the whole value of a key

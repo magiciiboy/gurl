@@ -1,4 +1,9 @@
-package protocol
+package http
+
+import (
+	"fmt"
+	"strings"
+)
 
 // ProtoVersion HTTP uses a "<major>.<minor>" numbering scheme to indicate versions
 // of the protocol. This specification defines version "1.1". The
@@ -19,3 +24,21 @@ var HTTPVersion1_1 = ProtoVersion{Major: 1, Minor: 1, Text: "HTTP/1.1"}
 
 // HTTPVersion2_0 is HTTP/2.0
 var HTTPVersion2_0 = ProtoVersion{Major: 2, Minor: 0, Text: "HTTP/2.0"}
+
+// GetProtolVersionFromText Extract
+func GetProtolVersionFromText(text string) (*ProtoVersion, error) {
+	parts := strings.Split(text, "/")
+	if len(parts) != 2 && parts[0] != "HTTP" {
+		return nil, fmt.Errorf("Unrecognized version: %s", text)
+	}
+	switch parts[1] {
+	case "1.0":
+		return &HTTPVersion1_0, nil
+	case "1.1":
+		return &HTTPVersion1_1, nil
+	case "2.0":
+		return &HTTPVersion2_0, nil
+	default:
+		return nil, fmt.Errorf("Unrecognized version: %s", text)
+	}
+}
