@@ -6,6 +6,7 @@ This package uses HTTP/1.1 accordingly to RFC 7230.
 Of course, this has a lot of limitations since it has a very simple implementation.
 - Only support HTTP/1.1
 - Only method GET
+- Only support http scheme
 - No Authentication
 - No Cookie/Session
 
@@ -25,10 +26,19 @@ Arguments:
 ```
 
 ## How to run
-### Quick run
+### Send an HTTP Request
 ```bash
-go run cmd/gurl/gurl.go
+go run cmd/gurl/gurl.go --url http://linktree.magicii.workers.dev/links
 ```
 
-## Resources
-- Project Layout: https://github.com/golang-standards/project-layout
+### Profile
+```bash
+go run cmd/gurl/gurl.go --url http://linktree.magicii.workers.dev/links --profile 100
+```
+
+## Examples
+### Send an HTTP Request
+![](./docs/images/Request.png)
+
+### Profile
+![](./docs/images/Profile.png)

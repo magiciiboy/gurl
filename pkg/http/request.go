@@ -10,7 +10,7 @@ import (
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
 type Request struct {
 	Method       string
-	URL          urllib.URL
+	URL          *urllib.URL
 	IsSecure     bool
 	ProtoVersion *ProtoVersion
 	Headers      Header
@@ -22,13 +22,14 @@ type Request struct {
 const defaultUserAgent = "gurl-http-client/1.1"
 
 // CreateGETRequest creates a new GET Request
-func CreateGETRequest(url string) *Request {
+func CreateGETRequest(url string) (*Request, error) {
+	URL, err := urllib.ParseURL(url)
 	return &Request{
 		Method:       "GET",
-		URL:          urllib.ParseSimpleURL(url),
+		URL:          URL,
 		Headers:      Header{"User-Agent": []string{defaultUserAgent}},
 		ProtoVersion: &HTTPVersion1_1,
-	}
+	}, err
 }
 
 // GetUserAgent returns Content-Type header

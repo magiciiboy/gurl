@@ -17,28 +17,35 @@ type URL struct {
 }
 
 // URLPattern is RegExp pattern of an URL
-const URLPattern = `^((http[s]?):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$`
+const URLPattern = `^(?:https?:\/\/)?(?:[^@\/\n]+@)?([^:\/\n]+)/([\w\-\_\.\/]*)?`
 
-// ParseURL creates an URL object from a string
-func ParseURL(url string) URL {
+// ParseURL is a simple version of extracting an URL object from a string
+func ParseURL(url string) (*URL, error) {
 	re := regexp.MustCompile(URLPattern)
 	matched := re.MatchString(url)
 
-	fmt.Printf("Match: %v\n", matched)
-	parts := re.FindAllString(url, -1)
-	for _, elem := range parts {
-		fmt.Println(elem)
-	}
-	return URL{}
-}
+	if matched {
 
-// ParseSimpleURL creates a simple URL with URL string
-func ParseSimpleURL(url string) URL {
-	return URL{
-		Scheme: "https",
-		Host:   "linktree.magicii.workers.dev",
-		Port:   443,
-		Path:   "/links",
-		URL:    url,
+		submatchall := re.FindAllStringSubmatch(url, -1)
+		host, path := "", ""
+		if len(submatchall) >= 1 {
+			parts := submatchall[0]
+			if l := len(parts); l == 3 {
+				host, path = parts[1], "/"+parts[2]
+			} else if l == 2 {
+				host, path = parts[1], "/"
+			}
+
+			if host != "" && path != "" {
+				return &URL{
+					Scheme: "http",
+					Host:   host,
+					Path:   path,
+					Port:   80,
+					URL:    url,
+				}, nil
+			}
+		}
 	}
+	return nil, fmt.Errorf("Invalid URL. Got: %v", url)
 }

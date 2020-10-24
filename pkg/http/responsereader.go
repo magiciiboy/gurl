@@ -89,6 +89,7 @@ func readBodyContent(r *ResponseReader, res *Response) (string, error) {
 
 	contentLen := res.GetContentLength()
 	transferEnc := res.GetTransferEncoding()
+	// fmt.Printf("Len: %v, Encoding: %v", contentLen, transferEnc)
 
 	body := ""
 	var err error
