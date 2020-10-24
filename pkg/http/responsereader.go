@@ -105,7 +105,7 @@ func readBodyContent(r *ResponseReader, res *Response) (string, error) {
 
 func readLimitedBodyContent(r *ResponseReader, res *Response, contentLen int64) (body string, err error) {
 	p := make([]byte, ReadingChunkSize)
-	rbody := io.LimitReader(r.Reader, 461)
+	rbody := io.LimitReader(r.Reader, contentLen)
 	for {
 		n, err := rbody.Read(p)
 		if err != nil {
@@ -119,8 +119,8 @@ func readLimitedBodyContent(r *ResponseReader, res *Response, contentLen int64) 
 		}
 		body += string(p[:n])
 	}
-	if int64(len(body)) != contentLen {
-		return body, fmt.Errorf("Actual length of message body is different from Content-Length header")
+	if l := int64(len(body)); l != contentLen {
+		return body, fmt.Errorf("Actual length of message body (%v) is different from Content-Length header (%v)", l, contentLen)
 	}
 	return body, nil
 }

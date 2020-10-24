@@ -19,11 +19,11 @@ func (h Header) Add(k, v string) {
 // the value is extracted from a raw string
 // For example, "Content-Length: 123"
 func (h Header) AddLineString(line string) (key string, err error) {
-	elems := strings.Split(line, ":")
-	if len(elems) != 2 {
+	idx := strings.Index(line, ":")
+	if idx == -1 || idx == len(line)-1 {
 		return "", fmt.Errorf("Invalid header line: `%s`", line)
 	}
-	key, value := strings.TrimSpace(elems[0]), strings.TrimSpace(elems[1])
+	key, value := strings.TrimSpace(line[0:idx]), strings.TrimSpace(line[idx+1:])
 	h.Add(key, value)
 	return key, nil
 }
