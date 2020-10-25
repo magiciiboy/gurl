@@ -4,7 +4,7 @@ This package uses HTTP/1.1 accordingly to RFC 7230.
 
 ## Limitations
 Of course, this has a lot of limitations since it has a very simple implementation.
-- Only support HTTP/1.1 with persistent connection
+- Only support HTTP/1.1 with persistent connections
 - Only support method GET
 - Only support http scheme
 - No Authentication
@@ -99,3 +99,6 @@ Summary:
 
 ### Profile
 ![](./docs/images/Profile.png)
+
+## Github Repository
+https://github.com/magiciiboy/gurl
