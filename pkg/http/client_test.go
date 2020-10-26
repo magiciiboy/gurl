@@ -15,7 +15,7 @@ var clientTestSet = []ClientTestCase{
 	{
 		req: Request{
 			Method: "GET",
-			URL: url.URL{
+			URL: &url.URL{
 				Scheme: "http",
 				Host:   "linktree.magicii.workers.dev",
 				Port:   80,
@@ -30,7 +30,7 @@ var clientTestSet = []ClientTestCase{
 	{
 		req: Request{
 			Method: "GET",
-			URL: url.URL{
+			URL: &url.URL{
 				Scheme: "https",
 				Host:   "linktree.magicii.workers.dev",
 				Port:   80,
