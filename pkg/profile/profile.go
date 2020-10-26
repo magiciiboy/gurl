@@ -12,7 +12,6 @@ package profile
 import (
 	"fmt"
 	"time"
-	"unsafe"
 
 	"github.com/magiciiboy/gurl/pkg/common"
 	"github.com/magiciiboy/gurl/pkg/http"
@@ -114,7 +113,7 @@ func (p *Profiler) DoRequest(client *http.Client, req *http.Request) {
 		}
 	}
 
-	size := int64(unsafe.Sizeof(res.Raw))
+	size := res.GetSize()
 	p.Profile.MinResponseSize = common.MinInt64NonZero(p.Profile.MinResponseSize, size)
 	p.Profile.MaxResponseSize = common.MaxInt64(p.Profile.MaxResponseSize, size)
 	p.Profile.TotalRequest++

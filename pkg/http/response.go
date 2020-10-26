@@ -57,3 +57,8 @@ func (res *Response) AppendRaw(s string, isLine bool) {
 		res.Raw += "\r\n"
 	}
 }
+
+// GetSize returns size of the whole message
+func (res *Response) GetSize() int64 {
+	return int64(len(res.Body))
+}

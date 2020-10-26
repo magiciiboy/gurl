@@ -36,6 +36,7 @@ func main() {
 				fmt.Printf("Error: %v\n", err)
 			} else {
 				fmt.Printf("Response:\n%v\n", res.Raw)
+				fmt.Printf("Size: %v B\n", res.GetSize())
 			}
 		} else {
 			p := sendNRequestWithProfiling(http.DefaultClient, req, *prof)
